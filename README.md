@@ -1,0 +1,2 @@
+# SPMSEmails
+SPMS Emails microservice
