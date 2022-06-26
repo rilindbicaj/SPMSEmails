@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Njoftim për notim!</title>
+    <style>
+      body {
+        margin: 0;
+        /* font-family: "Montserrat", sans-serif;
+        font-family: "Raleway", sans-serif; */
+        font-family: Verdana, Geneva, Tahoma, sans-serif;
+        padding: 0;
+        font-size: 1.1em;
+        text-align: justify;
+      }
+      section {
+        box-sizing: border-box;
+        padding: 2%;
+        border-radius: 5px;
+        width: 40%;
+        margin-left: 30%;
+        margin-top: 5%;
+        margin-bottom: 5%;
+        min-height: 50vh;
+        background-color: whitesmoke;
+        box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.252);
+      }
+      span {
+        display: inline-block;
+        width: 100%;
+        background-color: rgb(8, 38, 8);
+      }
+
+      .line-big {
+        height: 25px;
+      }
+      .line-small {
+        height: 3px;
+      }
+      .text-big {
+        font-size: 1.2em;
+      }
+      .coloured {
+        display: flex;
+        width: 100%;
+        min-height: 100vh;
+        background: url("https://i.imgur.com/XiNa9RP.png");
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="coloured">
+      <section>
+        <span class="line-small"></span>
+        <h1 style="text-align: center">Njoftim për notim!</h1>
+        <span class="line-small"></span>
+        <div>
+          <p>Përshëndetje, <b>{{name}}</b></p>
+          <p>
+            Sot, në orën <b>{{time}}</b> është regjistruar në sistem nota në
+            lëndën <b>{{course}}</b> nga ligjëruesi <b>{{staff}}</b>.
+          </p>
+          <p>Nota e regjistruar është <b class="text-big">{{grade}}</b></p>
+          <p>
+            Nëse nota është e kënaqshme, nuk keni nevojë të veproni më tepër.
+            Ajo do të merret si e pranuar pas <b>48 orësh</b>.
+          </p>
+          <p>
+            Nëse dëshironi të refuzoni notën, keni kohë deri më datën
+            <b class="text-big">{{dueDate}}</b>, ora
+            <b class="text-big">{{time}}</b>, gjë të cilën duhet ta bëni përmes
+            sistemit.
+          </p>
+          <span class="line-small"></span>
+          <p style="text-align: center">
+            © SPMS - Sistemi Për Menaxhimin e Studentëve, 2022
+          </p>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
