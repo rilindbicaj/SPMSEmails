@@ -15,17 +15,26 @@
         font-size: 1.1em;
         text-align: justify;
       }
+      h1 {
+        background-color: rgb(8, 38, 8);
+        color: whitesmoke;
+        padding: 3%;
+      }
       section {
         box-sizing: border-box;
+
         padding: 2%;
+        padding-top: 0;
         border-radius: 5px;
-        width: 40%;
-        margin-left: 30%;
+        width: 50%;
+        margin-left: 25%;
         margin-top: 5%;
         margin-bottom: 5%;
-        min-height: 50vh;
         background-color: whitesmoke;
         box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.252);
+      }
+      section > div {
+        padding: 2.5%;
       }
       span {
         display: inline-block;
@@ -45,20 +54,35 @@
       .coloured {
         display: flex;
         width: 100%;
-        min-height: 100vh;
+        height: fit-content;
         background: url("https://i.imgur.com/XiNa9RP.png");
         background-position: center;
         background-size: cover;
         background-repeat: no-repeat;
+      }
+
+      @media only screen and (max-width: 1000px) {
+        section {
+          width: 70%;
+          margin-left: 15%;
+        }
+        section > div {
+          padding: 5%;
+        }
+      }
+
+      @media only screen and (max-width: 600px) {
+        section {
+          width: 90%;
+          margin-left: 5%;
+        }
       }
     </style>
   </head>
   <body>
     <div class="coloured">
       <section>
-        <span class="line-small"></span>
         <h1 style="text-align: center">Njoftim për notim!</h1>
-        <span class="line-small"></span>
         <div>
           <p>Përshëndetje, <b>{{name}}</b></p>
           <p>
