@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
-namespace Application.EventProcessing
+namespace SPMSEmails.BusServices
 {
     public interface IEventProcessor
     {
-        void ProcessEvent(string message);
+        Task ProcessEvent(string message);
+        
     }
 }

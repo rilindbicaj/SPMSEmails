@@ -1,16 +1,13 @@
-﻿using Application.EventProcessing;
+﻿using System;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace Application.AsyncDataService
+namespace SPMSEmails.BusServices
 {
     public class MessageBusSubscriber : BackgroundService
     {
@@ -24,14 +21,12 @@ namespace Application.AsyncDataService
         {
             _config = config;
             _eventProcessor = eventProcessor;
-            InitializeRabbitMQ();
+            InitializeRabbitMq();
         }
 
-        private void InitializeRabbitMQ()
+        private void InitializeRabbitMq()
         {
-            //  "RabbitMQHost": "localhost",
-            //  "RabbitMQPort": "5672",
-
+            
             var factory = new ConnectionFactory()
             { HostName = _config["RabbitMQHost"],
               Port = int.Parse(_config["RabbitMQPort"])
@@ -58,7 +53,7 @@ namespace Application.AsyncDataService
 
             var consumer = new EventingBasicConsumer(_channel);
 
-            consumer.Received += (ModuleHandle, ea) =>
+            consumer.Received += (moduleHandle, ea) =>
             {
                 Console.WriteLine("---> Event Received!");
 
@@ -71,7 +66,7 @@ namespace Application.AsyncDataService
 
             _channel.BasicConsume(queue: _queueName, autoAck:true, consumer: consumer);
 
-            return Task.CompletedTask;
+           return Task.CompletedTask;
         }
 
         private void RabbitMQ_ConnectionShutDown(object sender, ShutdownEventArgs e)

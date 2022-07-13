@@ -19,16 +19,6 @@ namespace SPMSEmails.Controllers
             _emailService = emailService;
         }
 
-        [HttpPost("test")]
-
-        public async Task<ActionResult> SendTestEmail(TestEmailDataDTO testEmailDataDto)
-        {
-            
-            await _emailService.SendTestEmail(testEmailDataDto);
-            return Ok("Test email sent successfully");
-
-        }
-
         [HttpPost("StudentGraded")]
 
         public async Task<ActionResult> NotifyStudentGraded(StudentGradedEmailData studentGradedEmailData)

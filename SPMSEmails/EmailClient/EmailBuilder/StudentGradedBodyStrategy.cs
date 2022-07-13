@@ -7,7 +7,7 @@ namespace SPMSEmails.EmailClient.EmailBuilder
 {
     public class StudentGradedBodyStrategy : IMessageBodyBuilderStrategy
     {
-        public string BuildMessageBody(Message message, EmailData emailData)
+        public string BuildMessageBody(EmailData emailData)
         {
             var data = (StudentGradedEmailData)emailData;
             

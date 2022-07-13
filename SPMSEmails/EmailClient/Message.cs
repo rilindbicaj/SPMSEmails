@@ -13,13 +13,13 @@ namespace SPMSEmails.EmailClient
         public string Subject { get; set; }
         public string Content { get; set; }
         public IFormFileCollection Attachments { get; set; }
-        public Message(IEnumerable<string> to, string subject, IFormFileCollection attachments, IMessageBodyBuilderStrategy strategy, EmailData emailData)
+        public Message(IEnumerable<string> to, string subject, string content, IFormFileCollection attachments)
         {
             To = new List<MailboxAddress>();
 
             To.AddRange(to.Select(x => new MailboxAddress(x,x)));
             Subject = subject;
-            Content = strategy.BuildMessageBody(this, emailData);
+            Content = content;
             Attachments = attachments;
         }
     }

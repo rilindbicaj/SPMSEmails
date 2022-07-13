@@ -1,93 +1,61 @@
-﻿using Application.Data;
-using Application.DTOs.LectureDtos;
-using AutoMapper;
-using Domain;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
+using SPMSEmails.EmailClient.DataObjects;
+using SPMSEmails.Services;
 
-namespace Application.EventProcessing
+namespace SPMSEmails.BusServices
 {
     public class EventProcessor : IEventProcessor
     {
         private readonly IServiceScopeFactory _scopeFactory;
-        private readonly IMapper _mapper;
 
-        public EventProcessor(IServiceScopeFactory scopeFactory, IMapper mapper)
+        public EventProcessor(IServiceScopeFactory scopeFactory)
         {
             _scopeFactory = scopeFactory;
-            _mapper = mapper;
         }
 
-        public void ProcessEvent(string message)
+        public async Task ProcessEvent(string message)
         {
             var eventType = DetermineEvent(message);
 
             switch (eventType)
             {
-                case EventType.AcademicStaffPublished:
-                    addAcademicStaff(message);
-                    break;
-                default:
+                case EventTypes.StudentGraded:
+                    await ProcessStudentGradedEvent(message);
                     break;
             }
         }
-        private EventType DetermineEvent(string notificationMessage)
+        private EventTypes DetermineEvent(string notificationMessage)
         {
             Console.WriteLine("---> determining event");
 
-            var eventType = JsonSerializer.Deserialize<GenericEventDto>(notificationMessage);
+            var eventType = JsonSerializer.Deserialize<EmailData>(notificationMessage);
 
-            switch (eventType.Event)
+            switch (eventType.EventType)
             {
-                case "AcademicStaff_Published":
+                case "StudentGraded":
                     Console.WriteLine("---> AcademicStaff Published Event Detected");
-                    return EventType.AcademicStaffPublished;
+                    return EventTypes.StudentGraded;
                 default:
                     Console.WriteLine("---> Could not determine the event type");
-                    return EventType.Undetermined;
+                    return EventTypes.Undetermined;
             }
         }
 
-        private void addAcademicStaff(string academicStaffPublishedMessage)
+        private async Task ProcessStudentGradedEvent(string jsonObject)
         {
-            using(var scope = _scopeFactory.CreateScope())
-            {
-                var repo = scope.ServiceProvider.GetRequiredService<ILectureGroupRepo>();
-            
-            var academicStaffPublishedDto = JsonSerializer
-                .Deserialize<AcademicStaffPublishedDto>(academicStaffPublishedMessage);
-
-            try
-            {
-                var academicStaff = _mapper.Map<AcademicStaff>(academicStaffPublishedDto);
-                    if (!repo.ExternalAcademicStaffExists(academicStaff.AcademicStaffId))
-                    {
-                        repo.CreateAcademicStaff(academicStaff);
-                        repo.SaveChanges();
-                        Console.WriteLine("--->AcademicStaff added...");
-
-                   }
-                    else
-                    {
-                        Console.WriteLine("--->AcademicStaff already exists...");
-                    }
-            }
-            catch(Exception ex)
-            {
-                Console.WriteLine($"---> could not add AademicStaff to DB {ex.Message}");
-            }
-            }
+            var emailData = JsonSerializer.Deserialize<StudentGradedEmailData>(jsonObject);
+            await GetEmailService().SendStudentGradedNotificationEmail(emailData);
         }
+
+        private IEmailService GetEmailService()
+        {
+            using var scope = _scopeFactory.CreateScope();
+            return scope.ServiceProvider.GetService<IEmailService>();
+        }
+
+    }
         
     }
-    enum EventType
-    {
-        AcademicStaffPublished,
-        Undetermined
-    }
-}

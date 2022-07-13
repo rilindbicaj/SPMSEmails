@@ -6,8 +6,8 @@ namespace SPMSEmails.Services
 {
     public interface IEmailService
     {
-        Task SendTestEmail(TestEmailDataDTO testEmailDataDto);
         Task SendStudentGradedNotificationEmail(StudentGradedEmailData studentGradedEmailData);
-        
+        Task SendPostNotificationEmail(PostNotificationEmailData postNotificationEmailData);
+
     }
 }

@@ -12,7 +12,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using SPMSEmails.BusServices;
 using SPMSEmails.EmailClient;
+using SPMSEmails.EmailClient.EmailBuilder;
 using SPMSEmails.Services;
 
 namespace SPMSEmails
@@ -30,11 +32,15 @@ namespace SPMSEmails
         public void ConfigureServices(IServiceCollection services)
         {
             
+            services.AddHostedService<MessageBusSubscriber>();
+            
             services.AddSingleton(Configuration
                 .GetSection("EmailConfiguration")
                 .Get<EmailConfiguration>());
             services.AddScoped<IEmailSender, EmailSender>();
             services.AddScoped<IEmailService, EmailService>();
+            services.AddSingleton<IEventProcessor, EventProcessor>();
+            services.AddScoped<IEmailBuilder, EmailBuilder>();
 
             services.Configure<FormOptions>(o =>
             {

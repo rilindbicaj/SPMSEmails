@@ -10,25 +10,25 @@ namespace SPMSEmails.Services
     public class EmailService : IEmailService
     {
         private readonly IEmailSender _sender;
+        private IEmailBuilder _builder;
 
-        public EmailService(IEmailSender sender)
+        public EmailService(IEmailSender sender, IEmailBuilder builder)
         {
             _sender = sender;
-        }
-        public async Task SendTestEmail(TestEmailDataDTO testEmailDataDto)
-        {
-            var to = new List<string> { testEmailDataDto.To };
-            var message = new Message(to, testEmailDataDto.Subject, null, null, null);
-            await _sender.SendEmailAsync(message);
+            _builder = builder;
         }
 
         public async Task SendStudentGradedNotificationEmail(StudentGradedEmailData studentGradedEmailData)
         {
-            var to = studentGradedEmailData.To;
-            var message = new Message(to, "Njoftim për notim", null, new StudentGradedBodyStrategy(),
-                studentGradedEmailData);
+            _builder.SetBuildingStrategy(new StudentGradedBodyStrategy());
+            string body = _builder.BuildBody(studentGradedEmailData);
+            var message = new Message(studentGradedEmailData.To, "Njoftim për notim", body, null);
             await _sender.SendEmailAsync(message);
         }
-        
+
+        public Task SendPostNotificationEmail(PostNotificationEmailData postNotificationEmailData)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
